@@ -29,10 +29,9 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ env.NOW }}
-        release_name: manga-ex-download-${{ env.NOW }}
+        release_name: builder-${{ env.NOW }}
         draft: false
         prerelease: false
-
     - name: Upload zip to release
       uses: actions/upload-release-asset@v1
       env:
