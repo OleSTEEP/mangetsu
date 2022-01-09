@@ -25,7 +25,8 @@ jobs:
       run: |
         zip -r build.zip build/*
         
-    - name: Create release
+    - name: create release
+      id: create_release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
