@@ -21,6 +21,12 @@ jobs:
     - name: cmake
       run: cmake -S ./ -B build
       
+    - name: make
+      run: cd ./build && make
+      
+    - name: back
+      run: cd ../
+      
     - name: make a zip
       run: |
         zip -r build.zip build/*
@@ -30,7 +36,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: test
+        tag_name: ttestt
         release_name: release-test-${{ env.NOW }}
         draft: false
         prerelease: false
