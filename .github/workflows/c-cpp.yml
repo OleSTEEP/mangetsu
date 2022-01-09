@@ -29,10 +29,10 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        release_name: builder-${{ env.NOW }}
+        tag_name: "release-test"
+        release_name: "release-test"
         draft: false
         prerelease: false
-        tag_name: "release"
       uses: actions/create-release@v1
       
     - name: Upload zip to release
