@@ -20,7 +20,6 @@ jobs:
     - name: make a zip
       run: zip -r build.zip build/*
     - name: create_release
-      uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
@@ -28,6 +27,7 @@ jobs:
         release_name: manga-ex-download-${{ env.NOW }}
         draft: false
         prerelease: false
+      uses: actions/create-release@v1
 
     - name: Upload zip to release
       uses: actions/upload-release-asset@v1
