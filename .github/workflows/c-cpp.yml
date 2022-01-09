@@ -1,40 +1,47 @@
-name: CI
+name: C/C++ CI
+
 on:
   push:
-    branches:
-      - develop
-      - main
+    branches: [ master ]
   pull_request:
+    branches: [ master ]
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    
     - name: install cmake
       run: sudo apt install -y build-essential cmake zlib1g-dev libssl-dev
+      
     - name: create build folder
       run: mkdir build
+      
     - name: cmake
       run: cmake -S ./ -B build
+      
     - name: make a zip
-      run: zip -r build.zip build/*
-    - name: create_release
+      run: |
+        zip -r build.zip build/*
+        
+    - name: Create release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ env.NOW }}
-        release_name: manga-ex-download-${{ env.NOW }}
+        release_name: builder-${{ env.NOW }}
         draft: false
         prerelease: false
+      id: create_release
       uses: actions/create-release@v1
-
+      
     - name: Upload zip to release
       uses: actions/upload-release-asset@v1
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./build.zip
-        asset_name: manga-ex-download-${{ env.NOW }}.zip
-        asset_content_type: application/zip
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./build.zip
+          asset_name: builder-${{ env.NOW }}.zip
+          asset_content_type: application/zip
