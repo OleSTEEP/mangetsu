@@ -1,13 +1,13 @@
-name: C/C++ CI
-
+name: CI
 on:
   push:
-    branches: [ master ]
+    branches:
+      - develop
+      - main
   pull_request:
-    branches: [ master ]
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -18,24 +18,24 @@ jobs:
     - name: cmake
       run: cmake -S ./ -B build
     - name: make a zip
-      run: |
-        zip -r build.zip build/*
-    - name: Create release
-      id: create_release
+      run: zip -r build.zip build/*
+    - name: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ env.NOW }}
-        release_name: builder-${{ env.NOW }}
+        release_name: manga-ex-download-${{ env.NOW }}
         draft: false
         prerelease: false
+
     - name: Upload zip to release
+#          if: startsWith(github.ref, 'refs/tags/vr') && github.repository == 'crazy-tea-party/read-mobile'
       uses: actions/upload-release-asset@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./build.zip
-        asset_name: builder-${{ env.NOW }}.zip
+        asset_name: manga-ex-download-${{ env.NOW }}.zip
         asset_content_type: application/zip
