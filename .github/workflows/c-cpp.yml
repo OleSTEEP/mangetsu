@@ -30,8 +30,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: "release-test"
-        release_name: "release-test"
+        tag_name: release-test-${{ env.NOW }}
+        release_name: release-test-${{ env.NOW }}
         draft: false
         prerelease: false
       uses: actions/create-release@v1
