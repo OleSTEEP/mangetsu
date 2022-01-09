@@ -18,10 +18,10 @@ jobs:
     - name: create build folder
       run: mkdir build
     - name: cmake
-      run: cmake ./ ./build
+      run: cmake -S ./ -B build
     - name: make a zip
       run: |
-        zip -r build.zip ./build/*
+        zip -r build.zip build/*
     - name: Create release
       id: create_release
       uses: actions/create-release@v1
