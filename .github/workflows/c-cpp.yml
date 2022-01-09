@@ -18,6 +18,4 @@ jobs:
     - name: create build folder
       run: mkdir build
     - name: cmake
-      run: cmake
-    - name: make
-      run: make
+      run: cmake ./src/tools/mrg_extract.cpp
