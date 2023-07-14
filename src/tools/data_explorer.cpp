@@ -230,7 +230,7 @@ int main(int argc, char **argv) {
   // Render bindings
   ImGuiIO &io = ImGui::GetIO();
   io.FontGlobalScale = 1.0;
-  io.Fonts->AddFontFromFileTTF("/usr/share/fonts/truetype/unifont/unifont.ttf",
+  io.Fonts->AddFontFromFileTTF("Unifont.ttf",
                                16, nullptr, io.Fonts->GetGlyphRangesJapanese());
 
   ImGui_ImplGlfw_InitForOpenGL(window, true);

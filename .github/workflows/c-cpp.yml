@@ -1,53 +1,55 @@
 name: C/C++ CI
-
 on:
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions: write-all
     steps:
     - uses: actions/checkout@v2
-    
-    - name: install cmake
-      run: sudo apt install -y build-essential cmake zlib1g-dev libssl-dev
-      
-    - name: create build folder
+
+    - name: Install dependencies
+      run: sudo apt install -y build-essential cmake zlib1g-dev libssl-dev libopengl-dev libglfw3-dev
+
+    - name: Get date
+      run: echo "DATE=$(date --rfc-3339=date)" >> $GITHUB_ENV
+
+    - name: Create build folder
       run: mkdir build
-      
-    - name: cmake
-      run: cmake -S ./ -B build
-      
-    - name: make
-      run: cd ./build && make
-      
-    - name: back
-      run: cd ../
-      
-    - name: make a zip
+
+    - name: Run cmake
+      run: cmake -DBUILD_GUI=On -S ./ -B build
+
+    - name: Run make
+      run: cd ./build && make && cd ../
+
+    - name: Make a zip
       run: |
-        zip -r build.zip build/*
-        
-    - name: create release
+        rm -rf build/CMakeCache.txt build/CMakeFiles build/Makefile build/cmake_install.cmake build/compile_commands.json build/*.a
+        cp font/Unifont.ttf build/
+        cd build
+        zip -r ../mangetsu.zip *
+
+    - name: Create release tag
       id: create_release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ttestt
-        release_name: release-test-${{ env.NOW }}
+        tag_name: ${{ env.DATE }}
+        release_name: mangetsu-${{ env.DATE }}
         draft: false
         prerelease: false
       uses: actions/create-release@v1
-      
+
     - name: Upload zip to release
       uses: actions/upload-release-asset@v1
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build.zip
-          asset_name: builder-${{ env.NOW }}.zip
+          asset_path: mangetsu.zip
+          asset_name: mangetsu-${{ env.DATE }}.zip
           asset_content_type: application/zip
